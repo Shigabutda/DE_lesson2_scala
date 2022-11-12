@@ -1,0 +1,103 @@
+import scala.io.StdIn.readLine
+
+
+
+// a.    Напишите программу, которая:
+// i.     выводит фразу «Hello, Scala!» справа налево
+// ii.     переводит всю фразу в нижний регистр
+// iii.     удаляет символ!
+// iv.     добавляет в конец фразы «and goodbye python!»
+object OperationOne extends App {
+  val oneVal = "Hello, Scala!"
+  println(oneVal.reverse)
+  println(oneVal.toLowerCase)
+  println(oneVal.dropRight(1))
+  println(oneVal.replace("!", ""))
+  println(oneVal ++ " and goodbye python!")
+
+  // b.     Напишите программу, которая вычисляет ежемесячный оклад сотрудника после вычета налогов.
+  // На вход вашей программе подается значение годового дохода до вычета налогов, размер премии –
+  // в процентах от годового дохода и компенсация питания.
+  def aIncome(GrossIncome: Double, bonus: Double, compensation: Double): Double = {
+    var Inc: Double = 0
+    Inc = (GrossIncome * ((100 + bonus) / 100) + compensation) / 12
+    return Inc
+  }
+
+  println(aIncome(1200, 20, 200))
+
+  // с.     Напишите программу, которая рассчитывает для каждого сотрудника отклонение(в процентах)
+  // от среднего значения оклада на уровень всего отдела. В итоговом значении должно учитываться
+  // в большую или меньшую сторону отклоняется размер оклада. На вход вышей программе подаются все значения,
+  // аналогичные предыдущей программе, а также список со значениями окладов сотрудников
+  // отдела 100, 150, 200, 80, 120, 75.
+  def meanElements(list: List[Float]): Float = list.sum / list.length
+
+  def DevIncome(ListIncome: List[Float]): Unit = {
+    var MeanIncome: Double = meanElements(ListIncome: List[Float])
+    for (n <- ListIncome) println(((n - MeanIncome) / MeanIncome * 100).round)
+  }
+
+  var staff: List[Double] = List(100, 150, 200, 80, 120, 75)
+  DevIncome(List(100, 150, 200, 80, 120, 75))
+
+  // d.      Попробуйте рассчитать новую зарплату сотрудника, добавив(или отняв, если сотрудник плохо себя вел)
+  // необходимую сумму с учетом результатов прошлого задания. Добавьте его зарплату в список
+  // и вычислите значение самой высокой зарплаты и самой низкой.
+  def Behavior(Income: Int, EmployeeBehavior: String): Double = {
+    if (EmployeeBehavior == "bad")
+      return Income - Income * 0.2
+    else
+      return Income + Income * 0.2
+
+  }
+  val NewIncome: Double =  Behavior(100, "bad")
+  staff = staff :+ NewIncome
+  println(staff)
+
+  println("Значение самой высокой запрлаты:"+staff.max)
+  println("Значение самой высокой запрлаты:"+staff.min)
+
+  // Пункт e.     Также в вашу команду пришли два специалиста с окладами 350 и 90 тысяч рублей.
+  // Попробуйте отсортировать список сотрудников по уровню оклада от меньшего к большему.
+
+  println("Пришли два новых сотрудника с зарплатой 350 и 90 т.р.")
+  staff = staff :+ 350
+  staff = staff :+ 90
+  staff = staff.sortWith(_<_)
+  println("Отсортированный список зарплат сотрудников:"+staff)
+
+  // Пункт f: Кажется, вы взяли в вашу команду еще одного сотрудника
+  // и предложили ему оклад 130 тысяч. Вычислите самостоятельно номер
+  // сотрудника в списке так, чтобы сортировка не нарушилась и добавьте его на это место.
+
+  val NewEmpl: Double = 130
+  for (n <- staff.indices){
+    if ((staff(n) < NewEmpl) && (staff(n+1) > NewEmpl)){
+      val (front, back) = staff.splitAt(n+1)
+      staff = front ++ List(NewEmpl) ++ back
+    }
+  }
+  println(staff)
+
+  // Пункт g: Попробуйте вывести номера сотрудников из полученного списка, которые попадают
+  // под категорию middle. На входе программе подается «вилка» зарплаты специалистов уровня middle.
+
+  var Middle:List[Int] = List()
+  for (n <- staff.indices){
+    if ((staff(n) <= 200) && (staff(n) >= 120))  Middle = Middle :+ n
+  }
+  println("Сотрудники уровня middle имеют индексы:"+Middle)
+
+  // Пункт h.     Однако наступил кризис и ваши сотрудники требуют повысить зарплату.
+  // Вам необходимо проиндексировать зарплату каждого сотрудника на уровень инфляции – 7%
+  var staffNew:List[Any] = List()
+  for (n <- staff){
+    val m = n * 2
+    staffNew = staffNew :+ m
+  }
+  println(staffNew)
+
+}
+
+
